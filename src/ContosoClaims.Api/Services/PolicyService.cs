@@ -46,6 +46,25 @@ public class PolicyService
         };
     }
 
+    public async Task<List<PolicyDto>> SearchByHolderAsync(string holderName)
+    {
+        var sql = $"SELECT * FROM policies WHERE holder_name LIKE '%{holderName}%'";
+        var policies = await _db.Policies.FromSqlRaw(sql).ToListAsync();
+        return policies.Select(p => new PolicyDto
+        {
+            Id = p.Id,
+            PolicyNumber = p.PolicyNumber,
+            HolderName = p.HolderName,
+            HolderEmail = p.HolderEmail,
+            ProductType = p.ProductType,
+            CoverageLimit = p.CoverageLimit,
+            Deductible = p.Deductible,
+            EffectiveDate = p.EffectiveDate,
+            ExpiryDate = p.ExpiryDate,
+            Status = p.Status
+        }).ToList();
+    }
+
     public async Task<PolicyDto?> GetPolicyByIdAsync(int id)
     {
         return await _db.Policies
