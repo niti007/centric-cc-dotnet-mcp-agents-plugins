@@ -1,0 +1,9 @@
+{
+  "name": "claims-kit",
+  "version": "0.1.0",
+  "description": "Contoso Claims review kit — reviewer agents, review commands, and an endpoint skill, packaged for reuse across repositories.",
+  "author": { "name": "Centric Claude Code Training" },
+  "commands": "./commands",
+  "skills": "./skills",
+  "agents": "./agents"
+}

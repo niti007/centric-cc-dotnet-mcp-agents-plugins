@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-test:
+    name: Build & test
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ContosoDemo!23
+          MYSQL_DATABASE: contoso_claims
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pContosoDemo!23"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      # Overrides ConnectionStrings:ClaimsDb from appsettings.json.
+      # CI's MySQL is on 3306; the workshop machine uses 3307.
+      ConnectionStrings__ClaimsDb: "Server=127.0.0.1;Port=3306;User ID=root;Password=ContosoDemo!23;Database=contoso_claims"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Load schema and seed data
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root -p'ContosoDemo!23' < db/schema.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -p'ContosoDemo!23' < db/seed.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -p'ContosoDemo!23' contoso_claims \
+            -e "SELECT (SELECT COUNT(*) FROM claims) AS claims, (SELECT COUNT(*) FROM policies) AS policies;"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test --no-build --configuration Release --verbosity normal
+
+  ai-review:
+    name: Claude review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Review the diff
+        env:
+          # Claude Code speaks the Anthropic Messages API. OpenRouter serves a
+          # compatible endpoint, so the CLI runs unmodified against it.
+          ANTHROPIC_BASE_URL: https://openrouter.ai/api
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
+          ANTHROPIC_MODEL: anthropic/claude-sonnet-5
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff "$BASE_SHA" "$HEAD_SHA" > /tmp/pr.diff
+          echo "Diff is $(wc -l < /tmp/pr.diff) lines"
+
+          claude -p "Read /tmp/pr.diff. Review it for correctness and security defects in this
+          ASP.NET Core + EF Core codebase, with particular attention to: authorization checks on
+          endpoints that mutate a specific claim, SQL built by string interpolation, unescaped
+          user content in generated HTML, and money handled as double instead of decimal.
+
+          Report only defects you can point at a specific line for. If the diff is clean, say so
+          in one line. Format as markdown with a '## Claude review' heading. Be concise — this is
+          posted as a PR comment." \
+            --allowedTools "Read,Grep,Glob" \
+            > /tmp/review.md 2>/tmp/review.err || {
+              echo "Claude review failed:"; cat /tmp/review.err; exit 1;
+            }
+
+          cat /tmp/review.md
+
+      - name: Post review as PR comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/review.md

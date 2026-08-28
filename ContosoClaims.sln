@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{34DD0FEE-EE75-4734-BD05-70944D076FDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContosoClaims.Api", "src\ContosoClaims.Api\ContosoClaims.Api.csproj", "{7F0226A5-7A7F-4708-9A8B-49FDED76D909}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6C0E1F3D-4A57-4007-8ED4-4B47EBB2682A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContosoClaims.Tests", "tests\ContosoClaims.Tests\ContosoClaims.Tests.csproj", "{A0D4F2B7-C20B-4D58-963C-D0E06A9B7E54}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mcp", "mcp", "{E467BB44-A6D3-4CD2-A15F-82573749926E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContosoClaims.Mcp", "mcp\ContosoClaims.Mcp\ContosoClaims.Mcp.csproj", "{A499E3CE-1BA2-491A-A96F-A705CE402254}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F0226A5-7A7F-4708-9A8B-49FDED76D909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0226A5-7A7F-4708-9A8B-49FDED76D909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0226A5-7A7F-4708-9A8B-49FDED76D909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0226A5-7A7F-4708-9A8B-49FDED76D909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0D4F2B7-C20B-4D58-963C-D0E06A9B7E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0D4F2B7-C20B-4D58-963C-D0E06A9B7E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0D4F2B7-C20B-4D58-963C-D0E06A9B7E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0D4F2B7-C20B-4D58-963C-D0E06A9B7E54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A499E3CE-1BA2-491A-A96F-A705CE402254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A499E3CE-1BA2-491A-A96F-A705CE402254}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A499E3CE-1BA2-491A-A96F-A705CE402254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A499E3CE-1BA2-491A-A96F-A705CE402254}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F0226A5-7A7F-4708-9A8B-49FDED76D909} = {34DD0FEE-EE75-4734-BD05-70944D076FDD}
+		{A0D4F2B7-C20B-4D58-963C-D0E06A9B7E54} = {6C0E1F3D-4A57-4007-8ED4-4B47EBB2682A}
+		{A499E3CE-1BA2-491A-A96F-A705CE402254} = {E467BB44-A6D3-4CD2-A15F-82573749926E}
+	EndGlobalSection
+EndGlobal

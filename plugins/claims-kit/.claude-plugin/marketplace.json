@@ -1,0 +1,11 @@
+{
+  "name": "centric-training",
+  "owner": { "name": "Centric Claude Code Training" },
+  "plugins": [
+    {
+      "name": "claims-kit",
+      "source": "./",
+      "description": "Reviewer agents, review commands, and an endpoint skill for the Contoso Claims API."
+    }
+  ]
+}

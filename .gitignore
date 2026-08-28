@@ -1,0 +1,18 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+
+# Exercise output — learners generate these; they are not part of the starting state
+reports/
+NOTES.md
+
+# Trainer material must never land in this repo
+FOLLOW-ALONG.md
+
+# Local tooling
+.vs/
+.idea/
+.DS_Store

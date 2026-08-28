@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "claims": {
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "mcp/ContosoClaims.Mcp",
+        "--no-build"
+      ],
+      "env": {
+        "CONTOSO_CLAIMS_CONNECTION": "Server=127.0.0.1;Port=3307;User ID=root;Password=ContosoDemo!23;Database=contoso_claims"
+      }
+    }
+  }
+}
