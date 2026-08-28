@@ -13,6 +13,9 @@ by hand.
 
 You need: **.NET 8 SDK**, **Docker**, **git**, and **Claude Code**.
 
+**Reset your data at any point** with `./db/reset.sh` (macOS/Linux) or `.\db\reset.ps1`
+(Windows). Expect 120 / 8 / 500 / 900 / 180 rows.
+
 ## What's in here
 
 | Path | What |

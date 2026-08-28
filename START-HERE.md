@@ -99,6 +99,44 @@ we use them during the session.
 
 ---
 
+## Resetting or updating your database
+
+You will need this during the session. Both are safe to run any number of times — the seed
+is deterministic, so everyone always ends up with identical data.
+
+### Reset — put the data back how it started
+
+Do this whenever your data has drifted: you approved a claim during a demo, an exercise
+changed rows, or your numbers stop matching the trainer's screen.
+
+```bash
+./db/reset.sh          # macOS / Linux
+```
+```powershell
+.\db\reset.ps1         # Windows PowerShell
+```
+
+It prints the row counts at the end. You want **120 / 8 / 500 / 900 / 180**. If your counts
+don't match those, say so — don't carry on with different data from the rest of the room.
+
+### Update — pull new data the trainer has pushed
+
+If the schema or seed changes during the course:
+
+```bash
+git pull
+```
+then run the reset script above. `git pull` updates the SQL files; it does not touch the
+database until you reload it. **Both steps, in that order.**
+
+### Or just ask Claude
+
+```
+Reset my Contoso Claims database and show me the row counts.
+```
+
+---
+
 ## Connecting a GUI client (optional)
 
 Any MySQL client works — MySQL Workbench, DBeaver, DataGrip, or the VS Code MySQL
