@@ -9,9 +9,6 @@ obj/
 reports/
 NOTES.md
 
-# Trainer material must never land in this repo
-FOLLOW-ALONG.md
-
 # Local tooling
 .vs/
 .idea/
