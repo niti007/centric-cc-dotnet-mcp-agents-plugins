@@ -85,20 +85,32 @@ jobs:
           git diff "$BASE_SHA" "$HEAD_SHA" > /tmp/pr.diff
           echo "Diff is $(wc -l < /tmp/pr.diff) lines"
 
+          # stdin is closed explicitly: with no TTY present the CLI otherwise waits on it.
+          set +e
           claude -p "Read /tmp/pr.diff. Review it for correctness and security defects in this
           ASP.NET Core + EF Core codebase, with particular attention to: authorization checks on
           endpoints that mutate a specific claim, SQL built by string interpolation, unescaped
           user content in generated HTML, and money handled as double instead of decimal.
 
           Report only defects you can point at a specific line for. If the diff is clean, say so
-          in one line. Format as markdown with a '## Claude review' heading. Be concise — this is
+          in one line. Format as markdown with a '## Claude review' heading. Be concise - this is
           posted as a PR comment." \
             --allowedTools "Read,Grep,Glob" \
-            > /tmp/review.md 2>/tmp/review.err || {
-              echo "Claude review failed:"; cat /tmp/review.err; exit 1;
-            }
+            --output-format text \
+            < /dev/null > /tmp/review.md 2>/tmp/review.err
+          STATUS=$?
+          set -e
 
-          cat /tmp/review.md
+          echo "--- claude exit status: $STATUS ---"
+          echo "--- stderr ---"; cat /tmp/review.err || true
+          echo "--- stdout ---"; cat /tmp/review.md || true
+
+          # The review is advisory. A reviewer that cannot run must not block a PR whose
+          # build and tests are green, so post a notice instead of failing the job.
+          # Note: authentication errors surface on stdout, not stderr.
+          if [ $STATUS -ne 0 ] || [ ! -s /tmp/review.md ]; then
+            printf '## Claude review\n\n_The automated review could not run on this PR (exit %s). See the workflow log._\n' "$STATUS" > /tmp/review.md
+          fi
 
       - name: Post review as PR comment
         env:
