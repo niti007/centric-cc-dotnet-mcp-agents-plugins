@@ -1,10 +1,11 @@
 {
   "name": "centric-training",
   "owner": { "name": "Centric Claude Code Training" },
+  "description": "Plugins built during the Centric Claude Code workshop for .NET developers.",
   "plugins": [
     {
       "name": "claims-kit",
-      "source": "./",
+      "source": "./plugins/claims-kit",
       "description": "Reviewer agents, review commands, and an endpoint skill for the Contoso Claims API."
     }
   ]
